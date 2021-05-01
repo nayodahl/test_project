@@ -14,7 +14,9 @@ class GithubAPICaller
     }
     
     /**
-     * retrieve commits from Github API.
+     * retrieve commits of a user on a given repo, between 2 dates, from Github API.
+     * doc : https://docs.github.com/en/rest/reference/repos#commits
+     * we decode the response and return the result as an array
      * @return array<array>
      */
     public function getCommitsFromApi(string $user, string $repository, string $since, string $until): array

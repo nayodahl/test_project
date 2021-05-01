@@ -27,12 +27,14 @@ class CollectionCreator
         $numberOfWeeksBetweenDates = $this->dateHelper->countNumberOfWeeksBetweenDates($since, $until);
         $result = array();
 
+        // we iterate through $numberOfWeeksBetweenDates and build a CollectionWeek object on each loop
         for ($i=0; $i < $numberOfWeeksBetweenDates; $i++) {
             $j=$i;
             $k=$j+1;
             $weekStart = clone $since;
             $weekEnd = clone $since;
 
+            // first we have to define date limits for this CollectionWeek
             while ($j > 0) {
                 $weekStart->modify('+7 day');
                 $j--;
@@ -43,6 +45,12 @@ class CollectionCreator
                 $k--;
             }
 
+            // if where are in the last iteration of this for loop, we override $weekend to be equal to the origal $until value
+            if ($i === ($numberOfWeeksBetweenDates - 1)){
+                $weekEnd = clone $until;
+            }
+
+            // now that date limits are set, we can make the call to GithubAPI
             $commits = $this->githubAPICaller->getCommitsFromApi(
                 $user,
                 $repository,
@@ -50,6 +58,7 @@ class CollectionCreator
                 $this->dateHelper->formatDate($weekEnd)
             );
 
+            // lastly, we can create our CollectionWeek object and define its properties
             $collection = new CollectionWeek();
             $collection->setCommits($commits);
             $collection->setYear(intval($weekStart->format('Y')));

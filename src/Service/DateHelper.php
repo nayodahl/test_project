@@ -43,13 +43,18 @@ class DateHelper
     }
 
     /**
-     * return number of weeks between 2 datetime objects
+     * return the number of weeks between 2 datetime objects
+     * minimum value returned should be 1
      */
     public function countNumberOfWeeksBetweenDates(DateTime $since, DateTime $until): int
     {
         $interval = $until->diff($since);
         $formatedInterval = $interval->format('%a');
         $value = $formatedInterval / 7;
+
+        if ($value <= 0) {
+            return 1;
+        }
 
         return intval(ceil($value));
     }
