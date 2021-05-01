@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Service\CollectionCreator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -21,16 +22,20 @@ class GithubController extends AbstractController
         CollectionCreator $collectionCreator,
         SerializerInterface $serializer
     ): Response {
-        $data = $collectionCreator->getCommitsCollection(
-            $user,
-            $repository,
-            $since,
-            $until,
-        );
-
-        $json = $serializer->serialize($data, 'json');
-        $response = new Response($json, 200, ['Content-Type' => 'application/json']);
-
-        return $response;
+        try {
+            $data = $collectionCreator->getCommitsCollection(
+                $user,
+                $repository,
+                $since,
+                $until,
+            );
+    
+            $json = $serializer->serialize($data, 'json');
+            $response = new Response($json, 200, ['Content-Type' => 'application/json']);
+    
+            return $response;
+        } catch (\Exception $e) {
+            return $this->json(['message' => $e->getMessage()], 400);
+        }
     }
 }

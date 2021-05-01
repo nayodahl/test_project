@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\CollectionWeek;
+use Exception;
 
 class CollectionCreator
 {
@@ -24,6 +25,11 @@ class CollectionCreator
     {
         $since = $this->dateHelper->initSinceDate($since);
         $until = $this->dateHelper->initUntilDate($until);
+
+        if ($since >= $until) {
+            throw new Exception('first date parameter should be anterior to second date parameter');
+        }
+
         $numberOfWeeksBetweenDates = $this->dateHelper->countNumberOfWeeksBetweenDates($since, $until);
         $result = array();
 
