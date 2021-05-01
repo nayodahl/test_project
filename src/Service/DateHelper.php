@@ -48,7 +48,7 @@ class DateHelper
     public function countNumberOfWeeksBetweenDates(DateTime $since, DateTime $until): int
     {
         $interval = $until->diff($since);
-        $formatedInterval = $interval->format('%d');
+        $formatedInterval = $interval->format('%a');
         $value = $formatedInterval / 7;
 
         return intval(ceil($value));
