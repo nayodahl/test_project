@@ -2,40 +2,26 @@
 
 namespace App\Entity;
 
-use App\Repository\CollectionWeekRepository;
-use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
-/**
- * @ORM\Entity(repositoryClass=CollectionWeekRepository::class)
- */
 class CollectionWeek
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @Ignore()
      */
-    private $id;
+    private int $id;
+
+    private int $year;
+
+    private int $week;
+
+    private int $count;
 
     /**
-     * @ORM\Column(type="integer")
+     * @var array<array>
      */
-    private $year;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $week;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $count;
-
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $commits = [];
+    private array $commits = [];
+    
 
     public function getId(): ?int
     {
@@ -78,11 +64,17 @@ class CollectionWeek
         return $this;
     }
 
+    /**
+     * @return array<array>
+     */
     public function getCommits(): ?array
     {
         return $this->commits;
     }
 
+    /**
+     * @param array<array> $commits
+     */
     public function setCommits(array $commits): self
     {
         $this->commits = $commits;
